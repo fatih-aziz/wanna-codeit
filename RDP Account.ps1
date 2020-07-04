@@ -3,7 +3,7 @@ Add-Type -AssemblyName System.Drawing
 
 # Form, create form container
 $form = New-Object System.Windows.Forms.Form
-$form.Text = 'Select a Computer'
+$form.Text = 'RDP Account'
 $form.Size = New-Object System.Drawing.Size(500, 500)
 $form.StartPosition = 'CenterScreen'
 
@@ -11,7 +11,7 @@ $form.StartPosition = 'CenterScreen'
 $okButton = New-Object System.Windows.Forms.Button
 $okButton.Location = New-Object System.Drawing.Point(35, 250)
 $okButton.Size = New-Object System.Drawing.Size(75, 23)
-$okButton.Text = 'OK'
+$okButton.Text = 'Remote'
 $okButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
 $form.AcceptButton = $okButton
 $form.Controls.Add($okButton)
@@ -29,7 +29,7 @@ $form.Controls.Add($cancelButton)
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10, 20)
 $label.Size = New-Object System.Drawing.Size(280, 20)
-$label.Text = 'Please select a computer:'
+$label.Text = 'Select computer to connect:'
 $form.Controls.Add($label)
 
 # ListBox object, create object that will contain selections.
@@ -40,9 +40,9 @@ $listBox.Height = 200
 
 
 # Selections, just copy-paste to make more
-[void]$listBox.Items.Add('PC1')
-[void]$listBox.Items.Add('PC2')
-[void]$listBox.Items.Add('PC3')
+[void]$listBox.Items.Add('PC1 - john@192.168.0.1')
+[void]$listBox.Items.Add('PC2 - johnconor@192.168.1.1')
+[void]$listBox.Items.Add('PC3 - johnconor@192.168.1.1')
 
 $form.Controls.Add($listBox)
 
@@ -61,26 +61,25 @@ if ($result -eq [System.Windows.Forms.DialogResult]::OK)
 	$defaultPass = "Johnstar2912"
 	$defaultRemoteIP = "192.168.10.1"
 	
-	#use switch to instead of if, 
-	switch ($x)
+	if (Select-String -InputObject $x -Pattern 'PC1')
 	{
-		'PC1' {
-			$User = $defaultUsername
-			$Pass = $defaultPass
-			$Server = $defaultRemoteIP
-		}
-		'PC2' {
-			# Customize as youwish
-			$User = "johnconor"
-			$Pass = "john"
-			$Server = "192.160.1.1"
-		}
-		'PC3' {
-			# Customize as youwish
-			$User = "johnconor"
-			$Pass = "john"
-			$Server = "192.160.1.1"
-		}
+		$User = $defaultUsername
+		$Pass = $defaultPass
+		$Server = $defaultRemoteIP
+	}
+	elseif (Select-String -InputObject $x -Pattern 'PC2')
+	{
+		# Customize as youwish
+		$User = "johnconor"
+		$Pass = "john"
+		$Server = "192.160.1.1"
+	}
+	elseif (Select-String -InputObject $x -Pattern 'PC3')
+	{
+		# Customize as youwish
+		$User = "johnconor"
+		$Pass = "john"
+		$Server = "192.160.1.1"
 	}
 	
 	$status = cmdkey /generic:TERMSRV/$Server /user:$User /pass:$Password
